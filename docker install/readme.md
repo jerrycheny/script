@@ -1,61 +1,90 @@
+
+
+
           
-# Docker 环境安装脚本 (Rocky Linux 9 专用) 🐳🪨
+# Rocky Linux 9 Docker 安装脚本 🐳🪨
 
-## 核心功能 🔧
+## 功能概述 🛠️
 
-本脚本专为 **Rocky Linux 9** 系统设计，主要功能包括：
+本脚本专为 **Rocky Linux 9** 系统设计，用于自动化安装和配置 Docker 环境，主要功能包括：
 
-1. **Docker 引擎安装**
-   - 自动配置官方 Docker CE 仓库
-   - 安装最新稳定版 Docker 引擎
-   - 设置开机自启服务
+- ✅ 配置阿里云 Rocky Linux 镜像源
+- ✅ 系统更新和依赖包安装
+- ✅ Docker CE 安装与配置
+- ✅ Docker 镜像加速设置
+- ✅ 防火墙和 SELinux 配置优化
+- 📝 详细的日志记录功能
 
-2. **Docker Compose 部署**
-   - 下载指定版本 Docker Compose
-   - 配置可执行权限
-   - 验证安装完整性
+## 使用说明 📖
 
-3. **权限管理**
-   - 创建 docker 用户组
-   - 将当前用户加入 docker 组
-   - 避免频繁使用 sudo
+### 1. 下载脚本
+```bash
+wget https://example.com/setup_docker.sh
+```
 
-4. **系统适配**
-   - 针对 Rocky Linux 9 的 SELinux 配置优化
-   - 防火墙规则自动调整
-   - 系统依赖包自动安装
+### 2. 赋予执行权限
+```bash
+chmod +x setup_docker.sh
+```
 
-## 典型使用场景 🖥️
+### 3. 以 root 用户执行
+```bash
+sudo ./setup_docker.sh
+```
 
-1. **全新系统初始化**
-   - 在刚安装的 Rocky Linux 9 上快速搭建容器环境
+## 代码功能详解 🔍
 
-2. **CI/CD 环境准备**
-   - 为自动化构建系统配置 Docker 运行时
+### 主要函数说明
 
-3. **教学演示环境**
-   - 快速创建一致的容器教学平台
+1. **`configure_repos`** - 配置阿里云镜像源
+   - 替换默认 mirrorlist
+   - 备份原始 repo 文件
 
-4. **开发测试环境**
-   - 为开发团队统一容器运行时版本
+2. **`update_system`** - 系统更新
+   - 清理 dnf 缓存
+   - 更新所有系统包
 
-## Rocky Linux 9 特别说明 🪨
+3. **`install_docker`** - Docker 安装
+   - 添加阿里云 Docker 源
+   - 安装最新版 Docker CE
 
-- 完美适配 Rocky Linux 9 的 dnf 包管理器
-- 正确处理 Rocky Linux 9 的 SELinux 策略
-- 优化了防火墙 (firewalld) 的容器网络规则
-- 解决了 Rocky Linux 9 特有的依赖包冲突问题
+4. **`configure_docker`** - Docker 配置
+   - 设置镜像加速器
+   - 启用开机自启
 
-## 使用限制 ⚠️
+5. **`disable_selinux`** - SELinux 配置
+   - 临时设置为 Permissive 模式
+   - 永久禁用（需重启生效）
 
-- **仅支持 Rocky Linux 9** (不保证在其他版本正常工作)
-- 需要 root 权限执行
-- 会修改系统关键配置
+## 重要配置项 ⚙️
+
+```bash
+# 日志文件路径
+LOG_FILE="/var/log/setup_docker.log"
+
+# Docker 镜像加速器
+REGISTRY_MIRROR="https://dockerhub.icu"
+```
+
+## 注意事项 ⚠️
+
+1. **必须使用 root 权限执行**
+2. 脚本执行后会 **禁用 firewalld**
+3. SELinux 配置 **需要重启系统** 才能完全生效
+4. 完整日志保存在 `/var/log/setup_docker.log`
+
+## 适用场景 🖥️
+
+- 全新 Rocky Linux 9 系统初始化
+- 批量部署 Docker 环境
+- CI/CD 流水线环境准备
 
 ## 技术亮点 ✨
 
-- 自动检测 Rocky Linux 9 系统版本
-- 详细的错误日志记录
+- 全自动化安装流程
+- 完善的错误处理和日志记录
+- 针对 Rocky Linux 9 特别优化
 - 关键操作前的系统状态检查
-- 完善的回滚机制
+
+Happy Dockerizing on Rocky Linux! 🎉
         
